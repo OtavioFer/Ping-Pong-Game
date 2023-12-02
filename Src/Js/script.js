@@ -12,17 +12,38 @@ function setup() {
 
 // função para desenhar elementos de forma estatica;
 function draw() {
+    // desenha o campo;
     canvasCtx.fillStyle = "#286047";
     canvasCtx.fillRect(0, 0, window.innerWidth, window.innerHeight); 
     
     canvasCtx.fillStyle = "#ffffff";
 
-    const x = window.innerWidth / 2 - lineWidth / 2;
-    const y = 0;
-    const w = lineWidth;
-    const h = window.innerHeight;
+    // desenha linha central;
+    canvasCtx.fillRect(
+        window.innerWidth / 2 - lineWidth / 2,
+        0,
+        lineWidth,
+        window.innerHeight
+    );
 
-    canvasCtx.fillRect(x, y, w, h);
+    // desenha raquete esquerda:
+    canvasCtx.fillRect(10,
+        400,
+        lineWidth,
+        200);
+
+    // desenha raquete direita;
+    canvasCtx.fillRect(
+        window.innerWidth - lineWidth - 10,
+        100,
+        lineWidth,
+        200
+    );
+
+    // desenha bolinha;
+    canvasCtx.beginPath();
+    canvasCtx.arc(200, 300, 20, 2 * Math.PI, false);
+    canvasCtx.fill();
 }
 
 setup();
