@@ -30,7 +30,8 @@ function draw() {
     canvasCtx.fillRect(10,
         400,
         lineWidth,
-        200);
+        200
+        );
 
     // desenha raquete direita;
     canvasCtx.fillRect(
@@ -42,8 +43,20 @@ function draw() {
 
     // desenha bolinha;
     canvasCtx.beginPath();
-    canvasCtx.arc(200, 300, 20, 2 * Math.PI, false);
+    canvasCtx.arc(200,
+        300,
+        20,
+        2 * Math.PI,false
+        );
     canvasCtx.fill();
+
+    // Desenha placar;
+    canvasCtx.font = "bold 72px Arial";
+    canvasCtx.textAlign = "center";
+    canvasCtx.textBaseline = "top";
+    canvasCtx.fillStyle = "#01341d";
+    canvasCtx.fillText("3", window.innerWidth / 4, 50);
+    canvasCtx.fillText("2", window.innerWidth / 4 + window.innerWidth / 2, 50);
 }
 
 setup();
