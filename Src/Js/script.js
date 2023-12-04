@@ -3,6 +3,8 @@ const canvasEl = document.querySelector("canvas"),
  canvasCtx = canvasEl.getContext("2d"),
  gapX = 10;
 
+ const mouse = { x: 0, y: 0}
+
  // objeto campo;
  const field = {
     w: window.innerWidth,
@@ -28,13 +30,18 @@ const canvasEl = document.querySelector("canvas"),
  // objeto raquete esquerda;
  const leftPaddle = {
     x: gapX,
-    y: 100,
+    y: 0,
     w: line.w,
     h: 200,
+    _move: function() {
+        this.y = mouse.y - this.h / 2;
+    },
     draw: function() {
         // desenha raquete esquerda:
         canvasCtx.fillStyle = "#ffffff";
         canvasCtx.fillRect(this.x, this.y, this.w, this.h);
+
+        this._move();
     }
  }
 
@@ -45,10 +52,15 @@ const canvasEl = document.querySelector("canvas"),
     y: 100,
     w: line.w,
     h: 200,
+    _move: function() {
+        this.y = ball.y;
+    },
     draw: function() {
         // desenha raquete esquerda:
         canvasCtx.fillStyle = "#ffffff";
         canvasCtx.fillRect(this.x, this.y, this.w, this.h);
+
+        this._move();
     }
  }
 
@@ -72,12 +84,19 @@ const canvasEl = document.querySelector("canvas"),
     x: 300,
     y: 200,
     r: 20,
+    speed: 5,
+    _move: function() {
+        this.x += 1 * this.speed;
+        this.y += 1 * this.speed;
+    },
     draw: function() {
         // desenha bola;
         canvasCtx.beginPath();
         canvasCtx.fillStyle = "#ffffff";
         canvasCtx.arc(this.x,  this.y, this.r, 2 * Math.PI,false);
         canvasCtx.fill();
+
+        this._move();
     }
  }
 
@@ -97,13 +116,32 @@ function draw() {
     rightPaddle.draw();
     score.draw();
     ball.draw();
-    
-    
-
-    
-
-    
 }
 
+// animação da bolinha;
+window.animateFrame = (function () {
+    return (
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function (callback) {
+        return window.setTimeout(callback, 1000 / 60)
+      }
+    )
+  })();
+
+  function main() {
+    animateFrame(main);
+    draw();
+  }
+
 setup();
-draw();
+main();
+
+// cria ouvinte de evento para mouse;
+canvasEl.addEventListener('mousemove', function(e) {
+    mouse.x = e.pageX;
+    mouse.y = e.pageY;
+})
