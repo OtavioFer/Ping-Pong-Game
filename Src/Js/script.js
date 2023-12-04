@@ -66,8 +66,14 @@ const canvasEl = document.querySelector("canvas"),
 
  // objeto placar;
  const score = {
-    human: 1,
-    computer: 2,
+    human: 0,
+    computer: 0,
+    increaseHuman: function() {
+        this.human++;
+    },
+    increaseComputer: function() {
+        this.computer++;
+    },
     draw: function() {
         // Desenha placar;
         canvasCtx.font = "bold 72px Arial";
@@ -81,13 +87,67 @@ const canvasEl = document.querySelector("canvas"),
 
  // objeto bola
  const ball = {
-    x: 300,
-    y: 200,
+    x: 0,
+    y: 0,
     r: 20,
     speed: 5,
+    directionX: 1,
+    directionY: 1,
+    _calcPosition: function() {
+        // verifica se jogador Nº1 fez um ponto (x > largura do campo);
+        if(this.x > field.w - this.r - rightPaddle.w - gapX) {
+            // verifica se a raquete direita está na posição y da bola;
+            if(this.y  + this.r > rightPaddle.y &&
+            this.y - this.r < rightPaddle.y + rightPaddle.h
+            ) {   
+                // rebate a bola invertendo sinal de x;
+                this._reverseX();             
+            } else {
+                // Ponto para jogador Nº1;
+                score.increaseHuman();
+                this._pointUp();
+            }
+        }
+
+        // verifica se jogador Nº2 fez um ponto (x < 0);
+        if(this.x < this.r + leftPaddle.w + gapX) {
+            // verifica se raquete esquerda esta na posição y da bola;
+            if(this.y + this.r > leftPaddle.y &&
+               this.y - this.r < leftPaddle.y + leftPaddle.h
+               ) {
+                // rebate a bola invertendo sinal de x;
+                this._reverseX();
+            } else {
+                // Ponto para jogador Nº2;
+                score.increaseComputer();
+                this._pointUp();
+            }
+        }
+
+        // verifica as laterais superiores e inferiores do campo;
+        if(
+            (this.y - this.r < 0 && this.directionY < 0) ||
+            (this.y > field.h - this.r && this.directionY > 0)
+            ) {
+            // rebate a bola invertendo o sinal do eixo Y;
+            this._reverseY();
+        }
+    },
+    _reverseX: function() {
+        this.directionX *= - 1;
+    },
+    _reverseY: function() {
+        // 1 * -1 = -1;
+        // -1 * -1 = 1;
+        this.directionY *= - 1;
+    },
+    _pointUp: function() {
+        this.x = field.w / 2;
+        this.y = field.h / 2;
+    },
     _move: function() {
-        this.x += 1 * this.speed;
-        this.y += 1 * this.speed;
+        this.x += this.directionX * this.speed;
+        this.y += this.directionY * this.speed;
     },
     draw: function() {
         // desenha bola;
@@ -96,6 +156,7 @@ const canvasEl = document.querySelector("canvas"),
         canvasCtx.arc(this.x,  this.y, this.r, 2 * Math.PI,false);
         canvasCtx.fill();
 
+        this._calcPosition();
         this._move();
     }
  }
