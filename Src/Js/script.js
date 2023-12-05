@@ -52,8 +52,16 @@ const canvasEl = document.querySelector("canvas"),
     y: 100,
     w: line.w,
     h: 200,
+    speed: 2,
     _move: function() {
-        this.y = ball.y;
+        if(this.y + this.h / 2 < ball.y + ball.r) {
+            this.y += this.speed;
+        } else {
+            this.y -= this.speed;
+        }
+    },
+    speedUp: function() {
+        this.speed += 1;
     },
     draw: function() {
         // desenha raquete esquerda:
@@ -87,10 +95,10 @@ const canvasEl = document.querySelector("canvas"),
 
  // objeto bola
  const ball = {
-    x: 0,
-    y: 0,
+    x: field.w / 2,
+    y: field.h / 2,
     r: 20,
-    speed: 5,
+    speed: 10,
     directionX: 1,
     directionY: 1,
     _calcPosition: function() {
@@ -141,7 +149,13 @@ const canvasEl = document.querySelector("canvas"),
         // -1 * -1 = 1;
         this.directionY *= - 1;
     },
+    _speedUp: function() {
+        this.speed += 1.5;
+    },
     _pointUp: function() {
+        this._speedUp();
+        rightPaddle.speedUp();
+
         this.x = field.w / 2;
         this.y = field.h / 2;
     },
@@ -153,7 +167,7 @@ const canvasEl = document.querySelector("canvas"),
         // desenha bola;
         canvasCtx.beginPath();
         canvasCtx.fillStyle = "#ffffff";
-        canvasCtx.arc(this.x,  this.y, this.r, 2 * Math.PI,false);
+        canvasCtx.arc(this.x,  this.y, this.r, 0, 2 * Math.PI,false);
         canvasCtx.fill();
 
         this._calcPosition();
