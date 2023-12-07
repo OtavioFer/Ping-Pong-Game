@@ -32,7 +32,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 O Ping-Pong | game é um programa para um oara testar e treinar lógica de programação, divirta-se!
 
-- [Acesse o projeto finalizado, online](https://otavio095.github.io/Projeto_DevLnks/)
+- [Acesse o projeto finalizado, online](https://otaviofer.github.io/Ping-Pong-Game/)
 
 ## :memo: Licença
 
